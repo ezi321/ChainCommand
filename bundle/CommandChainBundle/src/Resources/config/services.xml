@@ -32,6 +32,10 @@
 <!--            <tag name="ezi_ipsum_word_list_provider" />-->
 <!--        </service>-->
 <!--        <service id="Ezi\CommandChainBundle\Service\IpsumWordProviderInterface" alias="ezi.ipsum_word_list_provider" public="true" />-->
+
+        <service id="Ezi\CommandChainBundle\Command\CommandChainCommand">
+            <tag name="console.command" />
+        </service>
         <service id="Ezi\CommandChainBundle\EventSubscriber\ConsoleCommandSubscriber">
             <tag name="kernel.event_listener" event="console.command"/>
         </service>

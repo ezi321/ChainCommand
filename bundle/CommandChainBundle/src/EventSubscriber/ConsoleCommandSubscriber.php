@@ -9,9 +9,9 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
 {
     public function onConsoleCommand(ConsoleCommandEvent $event)
     {
-        $command = $event->getCommand();
-        $reflect = new \ReflectionClass($command::class);
-        dd($command::class);
+        //$command = $event->getCommand();
+        //$reflect = new \ReflectionClass($command::class);
+        //dd($command::class);
     }
 
     public static function getSubscribedEvents()
