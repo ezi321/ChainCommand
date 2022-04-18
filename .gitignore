@@ -1,0 +1,24 @@
+/bundle/BarBundle/composer.lock
+/bundle/BarBundle/vendor/
+
+/bundle/FooBundle/composer.lock
+/bundle/FooBundle/vendor/
+
+/bundle/CommandChainBundle/composer.lock
+/bundle/CommandChainBundle/vendor/
+
+/project/composer.lock
+/project/var/symfony.lock
+
+###> symfony/framework-bundle ###
+/project/.env.local
+/project/.env.local.php
+/project/.env.*.local
+/project/config/secrets/prod/prod.decrypt.private.php
+/project/public/bundles/
+/project/var/
+/project/vendor/
+###< symfony/framework-bundle ###
+
+/.idea/
+allowed.json

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:acme_demo="http://www.example.com/symfony/schema/"
+           xsi:schemaLocation="http://www.example.com/symfony/schema/ https://www.example.com/symfony/schema/hello-1.0.xsd">
+
+    <services>
+        <!-- Default configuration for services in *this* file -->
+        <!-- <defaults autowire="true" autoconfigure="true"/> -->
+
+        <!-- makes classes in src/ available to be used as services -->
+        <!-- this creates a service per class whose id is the fully-qualified class name -->
+        <!-- <prototype namespace="App\" resource="../src/*" exclude="../src/{DependencyInjection,Entity,Tests,Kernel.php}"/> -->
+
+        <!-- ... -->
+
+<!--        <service id="ezi.ipsum" class="Ezi\CommandChainBundle\Service\IpsumService" public="true">-->
+<!--            <argument type="tagged" tag="ezi_ipsum_word_list_provider" />-->
+<!--        </service>-->
+
+        <!-- <service id="ezi.ipsum" class="Ezi\CommandChainBundle\Service\IpsumService" public="true">
+            <argument key="$provider" type="service" id="ezi.ipsum_word_list_provider" />
+        </service> -->
+
+        <!-- <service id="ezi.ipsum" class="Ezi\CommandChainBundle\Service\IpsumService" public="true">
+            <argument key="$provider" type="collection" />
+        </service> -->
+
+<!--        <service id="Ezi\CommandChainBundle\Service\IpsumService" alias="ezi.ipsum" public="true" />-->
+
+<!--        <service id="ezi.ipsum_word_list_provider" class="Ezi\CommandChainBundle\Service\IpsumWordProvider" public="true">-->
+<!--            <tag name="ezi_ipsum_word_list_provider" />-->
+<!--        </service>-->
+<!--        <service id="Ezi\CommandChainBundle\Service\IpsumWordProviderInterface" alias="ezi.ipsum_word_list_provider" public="true" />-->
+        <service id="Ezi\CommandChainBundle\EventSubscriber\ConsoleCommandSubscriber">
+            <tag name="kernel.event_listener" event="console.command"/>
+        </service>
+        <service id="Ezi\CommandChainBundle\EventSubscriber\ConsoleErrorSubscriber">
+            <tag name="kernel.event_listener" event="console.error"/>
+        </service>
+    </services>
+</container>

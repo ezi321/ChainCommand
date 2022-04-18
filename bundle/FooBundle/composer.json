@@ -1,0 +1,22 @@
+{
+    "name": "ezi/foo-bundle",
+    "description": "Test bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ezi\\FooBundle\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Eugene Z",
+            "email": "ezibrov@yahoo.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require-dev": {
+        "symfony/console": "^5.4",
+        "symfony/http-kernel": "^5.4"
+    }
+}

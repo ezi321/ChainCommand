@@ -1,0 +1,31 @@
+{
+    "name": "ezi/command-chain-bundle",
+    "description": "Test task",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ezi\\CommandChainBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ezi\\CommandChainBundle\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Eugene Z",
+            "email": "ezibrov@yahoo.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require-dev": {
+        "symfony/phpunit-bridge": "^5.4",
+        "symfony/console": "^5.4",
+        "symfony/http-kernel": "^5.4",
+        "symfony/event-dispatcher": "^5.4",
+        "symfony/monolog-bundle": "3.x-dev",
+        "symfony/var-dumper": "^5.4"
+    }
+}
