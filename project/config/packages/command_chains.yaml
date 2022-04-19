@@ -1,0 +1,6 @@
+chain_commands:
+  chains:
+    test:
+      command: ''
+      priority: 0
+#      args: {}

@@ -2,8 +2,14 @@
     "doctrine/inflector": {
         "version": "2.0.4"
     },
+    "ezi/bar-bundle": {
+        "version": "dev-develop"
+    },
     "ezi/command-chain-bundle": {
         "version": "dev-main"
+    },
+    "ezi/foo-bundle": {
+        "version": "dev-develop"
     },
     "nikic/php-parser": {
         "version": "v4.13.2"

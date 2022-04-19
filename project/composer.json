@@ -16,6 +16,8 @@
     },
     "require-dev": {
         "ezi/command-chain-bundle": "@dev",
+        "ezi/foo-bundle": "@dev",
+        "ezi/bar-bundle": "@dev",
         "symfony/maker-bundle": "^1.38"
     },
     "config": {
