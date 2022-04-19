@@ -16,7 +16,8 @@ use Ezi\CommandChainBundle\Attributes\CommandChain;
     description: 'Console command that chain another commands',
 )]
 #[CommandChain(chains: [
-    ['command' => '', 'attributes' => null, 'priority' => 0]
+    ['command' => '', 'attributes' => null, 'priority' => 0],
+    ['command' => '', 'attributes' => null, 'priority' => 0],
 ])]
 class CommandChainCommand extends Command
 {

@@ -2,12 +2,13 @@
 
 namespace Ezi\CommandChainBundle\Attributes;
 
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Event\ConsoleEvent;
 
-#[\Attribute]
+#[\Attribute(\Attribute::TARGET_CLASS)]
 class CommandChain
 {
-    private \SplPriorityQueue $commandQueue;
+    private Application $application;
 
     /**
      * @return \SplPriorityQueue
@@ -29,10 +30,18 @@ class CommandChain
         }
     }
 
-    public function __construct(ConsoleEvent $event, array $chains)
+    public function __construct(array $chains)
     {
-        $chains = $event->getInput()->getArguments();
         $this->initialize($chains);
     }
 
+    public function setApplication(Application $application)
+    {
+        $this->application = $application;
+    }
+
+    public function getApplication(): Application
+    {
+        return $this->application;
+    }
 }

@@ -28,10 +28,10 @@
 
 <!--        <service id="Ezi\CommandChainBundle\Service\IpsumService" alias="ezi.ipsum" public="true" />-->
 
-<!--        <service id="ezi.ipsum_word_list_provider" class="Ezi\CommandChainBundle\Service\IpsumWordProvider" public="true">-->
-<!--            <tag name="ezi_ipsum_word_list_provider" />-->
-<!--        </service>-->
-<!--        <service id="Ezi\CommandChainBundle\Service\IpsumWordProviderInterface" alias="ezi.ipsum_word_list_provider" public="true" />-->
+        <service id="ezi.ipsum_word_list_provider" class="Ezi\CommandChainBundle\Service\IpsumWordProvider" public="true">
+            <argument key="$provider" type="service" id="ezi.ipsum_word_list_provider" />
+        </service>
+        <service id="Ezi\CommandChainBundle\Service\IpsumWordProviderInterface" alias="ezi.ipsum_word_list_provider" public="true" />
 
         <service id="Ezi\CommandChainBundle\Command\CommandChainCommand">
             <tag name="console.command" />
