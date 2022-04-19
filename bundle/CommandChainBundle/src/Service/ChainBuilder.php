@@ -15,7 +15,7 @@ class ChainBuilder implements ChainBuilderInterface
     public function __construct(LoggerInterface $logger, CommandChain $emptyChain)
     {
         $this->logger = $logger;
-        $this->$emptyChain = $emptyChain;
+        $this->commandChain = $emptyChain;
     }
 
     public function build(ConsoleEvent $event): CommandChain

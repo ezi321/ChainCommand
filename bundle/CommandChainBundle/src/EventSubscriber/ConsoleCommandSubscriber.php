@@ -15,11 +15,12 @@ use Symfony\Component\Console\Event\ConsoleCommandEvent;
 class ConsoleCommandSubscriber implements EventSubscriberInterface
 {
     private LoggerInterface $logger;
-    private LoggerInterface $chainBuilder;
+    private ChainBuilderInterface $chainBuilder;
 
     public function __construct(LoggerInterface $logger, ChainBuilderInterface $chainBuilder)
     {
         $this->logger = $logger;
+        $this->chainBuilder = $chainBuilder;
     }
 
     public function onConsoleCommand(ConsoleCommandEvent $event)
@@ -33,15 +34,18 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
         $input = new ArrayInput([]);
         $output = new BufferedOutput();
         //$command = $reflect->newInstance();
-        $command->run($event->getInput(), $output);
-        $foo = $app->find('bar:command');
-        $bar = $app->find('foo:command');
+//        $command->run($event->getInput(), $output);
+//        $foo = $app->find('bar:command');
+//        $bar = $app->find('foo:command');
+//
+//        $foo->run($input, $output);
+//        $bar->run($input, $output);
+//
+//
+//        dd($output->fetch());
 
-        $foo->run($input, $output);
-        $bar->run($input, $output);
 
 
-        dd($output->fetch());
 //        $input = new ArrayInput([
 //            'bar'
 //        ]);

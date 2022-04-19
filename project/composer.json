@@ -15,10 +15,11 @@
         "symfony/yaml": "5.4.*"
     },
     "require-dev": {
+        "ezi/bar-bundle": "@dev",
         "ezi/command-chain-bundle": "@dev",
         "ezi/foo-bundle": "@dev",
-        "ezi/bar-bundle": "@dev",
-        "symfony/maker-bundle": "^1.38"
+        "symfony/maker-bundle": "^1.38",
+        "symfony/monolog-bundle": "^3.7"
     },
     "config": {
         "allow-plugins": {

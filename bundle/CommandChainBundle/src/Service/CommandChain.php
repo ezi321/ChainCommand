@@ -2,24 +2,24 @@
 
 namespace Ezi\CommandChainBundle\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CommandChain extends Command implements CommandChainInterface
+class CommandChain implements CommandChainInterface
 {
     private array $commandQueue;
 
-    public function __construct(array $commandQueue)
+    public function __construct(LoggerInterface $logger)
     {
-        $this->commandQueue = $commandQueue;
-        parent::__construct();
+        $this->commandQueue = [];
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
-        return parent::SUCCESS;
+        //@TODO Add functionality
+        return Command::SUCCESS;
     }
 
     public function offsetExists(mixed $offset): bool
