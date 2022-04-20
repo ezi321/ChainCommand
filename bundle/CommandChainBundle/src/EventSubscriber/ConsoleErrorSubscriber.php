@@ -20,7 +20,7 @@ class ConsoleErrorSubscriber implements EventSubscriberInterface
         $this->logger->error(
             $event->getError()->getTraceAsString(),
             [
-                $event->getCommand()->getName() => $event->getExitCode()
+                $event?->getCommand()?->getName() => $event?->getExitCode()
             ]
         );
     }

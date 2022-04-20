@@ -2,6 +2,9 @@
 
 namespace Ezi\CommandChainBundle\Service;
 
+use Ezi\CommandChainBundle\Exception\CommandExecutionException;
+use Ezi\CommandChainBundle\Exception\UnsupportedTypeException;
+use PHPUnit\Util\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,8 +21,15 @@ class CommandChain implements CommandChainInterface
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        //@TODO Add functionality
-        return Command::SUCCESS;
+        $result = Command::SUCCESS;
+        foreach ($this as $command) {
+            $result = $command->execute($input, $output);
+            if ($result !== Command::SUCCESS) {
+                throw new CommandExecutionException();
+            }
+        }
+
+        return $result;
     }
 
     public function offsetExists(mixed $offset): bool
@@ -36,8 +46,17 @@ class CommandChain implements CommandChainInterface
         return $returnValue;
     }
 
+    /**
+     * @param mixed $offset
+     * @param Command $value
+     * @return void
+     * @throws UnsupportedTypeException
+     */
     public function offsetSet(mixed $offset, mixed $value): void
     {
+        if( !$value instanceof Command) {
+            throw new UnsupportedTypeException();
+        }
         $this->commandQueue[$offset] = $value;
     }
 

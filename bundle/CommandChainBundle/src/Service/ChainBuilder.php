@@ -10,16 +10,25 @@ use Symfony\Component\Console\Event\ConsoleEvent;
 class ChainBuilder implements ChainBuilderInterface
 {
     private LoggerInterface $logger;
+    private array $configuration;
     private CommandChain $commandChain;
 
-    public function __construct(LoggerInterface $logger, CommandChain $emptyChain)
+    public function __construct(LoggerInterface $logger, array $configuration)
     {
         $this->logger = $logger;
-        $this->commandChain = $emptyChain;
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfiguration(): array
+    {
+        return $this->configuration;
     }
 
     public function build(ConsoleEvent $event): CommandChain
     {
-        // TODO: Implement build() method.
+        $config = $this->getConfiguration();
     }
 }

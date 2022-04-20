@@ -2,46 +2,29 @@
 
 namespace Ezi\CommandChainBundle\Attributes;
 
+use Ezi\CommandChainBundle\Service\ChainBuilder;
+use Ezi\CommandChainBundle\Service\ChainBuilderInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleEvent;
+use Ezi\CommandChainBundle\Service\CommandChain as ChainCommands;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class CommandChain
 {
-    private Application $application;
+    private array $configuration;
 
-    /**
-     * @return \SplPriorityQueue
-     */
-    public function getCommandQueue(): \SplPriorityQueue
+    public function __construct(array $configuration)
     {
-        return $this->commandQueue;
+        $this->configuration = $configuration;
     }
 
     /**
-     * @param array $chains
-     * @return void
+     * @return array
      */
-    protected function initialize(array $chains): void
+    public function getConfiguration(): array
     {
-        $this->commandQueue = new \SplPriorityQueue();
-        foreach ($chains as $commandChain => $priority) {
-            $this->commandQueue->insert($commandChain['command'], $commandChain['priority']);
-        }
-    }
-
-    public function __construct(array $chains)
-    {
-        $this->initialize($chains);
-    }
-
-    public function setApplication(Application $application)
-    {
-        $this->application = $application;
-    }
-
-    public function getApplication(): Application
-    {
-        return $this->application;
+        return $this->configuration;
     }
 }

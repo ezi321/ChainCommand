@@ -5,6 +5,7 @@ namespace Ezi\CommandChainBundle\EventSubscriber;
 use Ezi\CommandChainBundle\Attributes\CommandChain;
 use Ezi\CommandChainBundle\Service\ChainBuilderInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,11 +17,13 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
 {
     private LoggerInterface $logger;
     private ChainBuilderInterface $chainBuilder;
+    private array $configuration;
 
-    public function __construct(LoggerInterface $logger, ChainBuilderInterface $chainBuilder)
+    public function __construct(LoggerInterface $logger, ChainBuilderInterface $chainBuilder, array $configuration)
     {
         $this->logger = $logger;
         $this->chainBuilder = $chainBuilder;
+        $this->configuration = $configuration;
     }
 
     public function onConsoleCommand(ConsoleCommandEvent $event)
@@ -28,8 +31,7 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
         $command = $event->getCommand();
         $app = $command->getApplication();
 
-        //dd($event->getInput()->getArguments());
-        $reflect = new \ReflectionClass($command::class);
+        $this->mergeConfiguration($command);
 
         $input = new ArrayInput([]);
         $output = new BufferedOutput();
@@ -53,7 +55,7 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
 //        $event->disableCommand();
 
 
-//        $attributes = $reflect->getAttributes(CommandChain::class);
+
 //        foreach ($attributes as $attribute) {
 //            $chain = $attribute->newInstance();
 //            dd($chain);
@@ -66,5 +68,21 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
         return [
             'console.command' => 'onConsoleCommand',
         ];
+    }
+
+    private function mergeConfiguration(Command $command)
+    {
+        $reflect = new \ReflectionClass($command::class);
+        $attributes = $reflect->getAttributes(CommandChain::class);
+
+        if(!empty($attributes)){
+            $attribute = array_shift($attributes);
+            if($attribute instanceof \ReflectionAttribute) {
+                $config = [
+                    $command->getName() => $attribute->newInstance()->getConfiguration()
+                ];
+                $this->configuration = array_merge($config, $this->configuration);
+            }
+        }
     }
 }
