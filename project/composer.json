@@ -20,8 +20,7 @@
         "ezi/foo-bundle": "@dev",
         "symfony/browser-kit": "5.4.*",
         "symfony/css-selector": "5.4.*",
-        "symfony/maker-bundle": "^1.38",
-        "symfony/monolog-bundle": "^3.7"
+        "symfony/maker-bundle": "^1.38"
     },
     "config": {
         "allow-plugins": {

@@ -7,13 +7,13 @@
     <services>
 
         <service id="ezi.command_chain_builder" class="Ezi\CommandChainBundle\Service\ChainBuilder" public="true">
-            <argument key="$logger" type="service" id="monolog.logger" />
+            <argument key="$logger" type="service" id="logger" />
             <argument key="$commandChain" type="service" id="ezi.command_chain" />
         </service>
         <service id="Ezi\CommandChainBundle\Service\ChainBuilderInterface" alias="ezi.command_chain_builder" public="true" />
 
         <service id="ezi.command_chain" class="Ezi\CommandChainBundle\Service\CommandChain" public="true">
-            <argument key="$logger" type="service" id="monolog.logger" />
+            <argument key="$logger" type="service" id="logger" />
         </service>
         <service id="Ezi\CommandChainBundle\Service\CommandChainInterface" alias="ezi.command_chain" public="true" />
 
@@ -22,13 +22,13 @@
         </service>
 
         <service id="ezi.command_chain_subscriber" class="Ezi\CommandChainBundle\EventSubscriber\ConsoleCommandSubscriber">
-            <argument key="$logger" type="service" id="monolog.logger" />
+            <argument key="$logger" type="service" id="logger" />
             <argument key="$chainBuilder" type="service" id="ezi.command_chain_builder" />
             <tag name="kernel.event_listener" event="console.command"/>
         </service>
 
         <service id="ezi.command_error_subscriber" class="Ezi\CommandChainBundle\EventSubscriber\ConsoleErrorSubscriber">
-            <argument key="$logger" type="service" id="monolog.logger" />
+            <argument key="$logger" type="service" id="logger" />
             <tag name="kernel.event_listener" event="console.error"/>
         </service>
 
