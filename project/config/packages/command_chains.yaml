@@ -1,5 +1,9 @@
 chain_commands:
   chains:
+    default:
+      commands:
+        'foo:command': ~
+        'bar:command': ~
     test1:
       commands:
         'foo:command': ~
