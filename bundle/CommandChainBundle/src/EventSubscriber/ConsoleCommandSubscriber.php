@@ -3,6 +3,7 @@
 namespace Ezi\CommandChainBundle\EventSubscriber;
 
 use Ezi\CommandChainBundle\Attributes\CommandChain;
+use Ezi\CommandChainBundle\Exception\NotExecutableCommandException;
 use Ezi\CommandChainBundle\Service\ChainBuilderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -43,7 +44,9 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
     {
         $command = $event->getCommand();
 
-        if(array_key_exists($command->getName(), $this->configuration['chains'])) {
+        if($this->isCommandInChain($command->getName())) {
+            throw new NotExecutableCommandException();
+        } else if(array_key_exists($command->getName(), $this->configuration['chains'])) {
             $this->mergeConfiguration($command);
             $output = new BufferedOutput();
 
@@ -89,5 +92,16 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
             ];
             $this->configuration = array_merge($config, $this->configuration);
         }
+    }
+
+    private function isCommandInChain(string $name)
+    {
+        $configuration = $this->configuration['chains'];
+        foreach($configuration as $chain => $value) {
+            if(array_key_exists($name, $value['commands'])) {
+                return true;
+            }
+        }
+        return false;
     }
 }
