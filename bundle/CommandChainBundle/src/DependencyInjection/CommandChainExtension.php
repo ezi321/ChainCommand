@@ -18,8 +18,15 @@ class CommandChainExtension extends Extension
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
-        //$configurartion = $this->getConfiguration($configs, $container);
-        //$config = $this->processConfiguration($configurartion, $configs);
+        $configurartion = $this->getConfiguration($configs, $container);
+        $config = $this->processConfiguration($configurartion, $configs);
+
+        $container->getDefinition(
+            "ezi.command_chain_subscriber"
+        )->setArgument(2, $config);
+        $container->getDefinition(
+            "ezi.command_chain_builder"
+        )->setArgument(1, $config);
     }
 
     public function getAlias()

@@ -11,6 +11,9 @@
     "ezi/foo-bundle": {
         "version": "dev-develop"
     },
+    "monolog/monolog": {
+        "version": "2.5.0"
+    },
     "nikic/php-parser": {
         "version": "v4.13.2"
     },
@@ -25,6 +28,9 @@
     },
     "psr/log": {
         "version": "2.0.0"
+    },
+    "symfony/browser-kit": {
+        "version": "v5.4.3"
     },
     "symfony/cache": {
         "version": "v5.4.7"
@@ -47,11 +53,17 @@
             "bin/console"
         ]
     },
+    "symfony/css-selector": {
+        "version": "v5.4.3"
+    },
     "symfony/dependency-injection": {
         "version": "v5.4.7"
     },
     "symfony/deprecation-contracts": {
         "version": "v3.0.1"
+    },
+    "symfony/dom-crawler": {
+        "version": "v5.4.6"
     },
     "symfony/dotenv": {
         "version": "v5.4.5"
@@ -116,6 +128,21 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
+    },
+    "symfony/monolog-bridge": {
+        "version": "v5.4.3"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.7",
+            "ref": "213676c4ec929f046dfde5ea8e97625b81bc0578"
+        },
+        "files": [
+            "config/packages/monolog.yaml"
+        ]
     },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.25.0"

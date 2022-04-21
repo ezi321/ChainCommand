@@ -1,6 +1,14 @@
 chain_commands:
   chains:
-    test:
-      command: ''
-      priority: 0
-#      args: {}
+    default:
+      commands:
+        'foo:command': ~
+        'bar:command': ~
+    test1:
+      commands:
+        'foo:command': ~
+        'bar:command': ~
+    test2:
+      commands:
+        'bar:command': ~
+        'foo:command': ~

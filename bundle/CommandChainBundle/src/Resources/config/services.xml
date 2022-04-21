@@ -5,42 +5,31 @@
            xsi:schemaLocation="http://www.example.com/symfony/schema/ https://www.example.com/symfony/schema/hello-1.0.xsd">
 
     <services>
-        <!-- Default configuration for services in *this* file -->
-        <!-- <defaults autowire="true" autoconfigure="true"/> -->
 
-        <!-- makes classes in src/ available to be used as services -->
-        <!-- this creates a service per class whose id is the fully-qualified class name -->
-        <!-- <prototype namespace="App\" resource="../src/*" exclude="../src/{DependencyInjection,Entity,Tests,Kernel.php}"/> -->
+        <service id="ezi.command_chain_builder" class="Ezi\CommandChainBundle\Service\ChainBuilder" public="true">
+            <argument key="$logger" type="service" id="monolog.logger" />
+        </service>
+        <service id="Ezi\CommandChainBundle\Service\ChainBuilderInterface" alias="ezi.command_chain_builder" public="true" />
 
-        <!-- ... -->
-
-<!--        <service id="ezi.ipsum" class="Ezi\CommandChainBundle\Service\IpsumService" public="true">-->
-<!--            <argument type="tagged" tag="ezi_ipsum_word_list_provider" />-->
-<!--        </service>-->
-
-        <!-- <service id="ezi.ipsum" class="Ezi\CommandChainBundle\Service\IpsumService" public="true">
-            <argument key="$provider" type="service" id="ezi.ipsum_word_list_provider" />
-        </service> -->
-
-        <!-- <service id="ezi.ipsum" class="Ezi\CommandChainBundle\Service\IpsumService" public="true">
-            <argument key="$provider" type="collection" />
-        </service> -->
-
-<!--        <service id="Ezi\CommandChainBundle\Service\IpsumService" alias="ezi.ipsum" public="true" />-->
-
-<!--        <service id="ezi.ipsum_word_list_provider" class="Ezi\CommandChainBundle\Service\IpsumWordProvider" public="true">-->
-<!--            <tag name="ezi_ipsum_word_list_provider" />-->
-<!--        </service>-->
-<!--        <service id="Ezi\CommandChainBundle\Service\IpsumWordProviderInterface" alias="ezi.ipsum_word_list_provider" public="true" />-->
+        <service id="ezi.command_chain" class="Ezi\CommandChainBundle\Service\CommandChain" public="true">
+            <argument key="$logger" type="service" id="monolog.logger" />
+        </service>
+        <service id="Ezi\CommandChainBundle\Service\ChainBuilderInterface" alias="ezi.command_chain" public="true" />
 
         <service id="Ezi\CommandChainBundle\Command\CommandChainCommand">
             <tag name="console.command" />
         </service>
-        <service id="Ezi\CommandChainBundle\EventSubscriber\ConsoleCommandSubscriber">
+
+        <service id="ezi.command_chain_subscriber" class="Ezi\CommandChainBundle\EventSubscriber\ConsoleCommandSubscriber">
+            <argument key="$logger" type="service" id="monolog.logger" />
+            <argument key="$chainBuilder" type="service" id="ezi.command_chain_builder" />
             <tag name="kernel.event_listener" event="console.command"/>
         </service>
-        <service id="Ezi\CommandChainBundle\EventSubscriber\ConsoleErrorSubscriber">
+
+        <service id="ezi.command_error_subscriber" class="Ezi\CommandChainBundle\EventSubscriber\ConsoleErrorSubscriber">
+            <argument key="$logger" type="service" id="monolog.logger" />
             <tag name="kernel.event_listener" event="console.error"/>
         </service>
+
     </services>
 </container>
