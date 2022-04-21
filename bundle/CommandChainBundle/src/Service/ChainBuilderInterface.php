@@ -7,6 +7,6 @@ use Ezi\CommandChainBundle\Service\CommandChain;
 
 interface ChainBuilderInterface
 {
-    public function build(ConsoleEvent $event): CommandChain;
+    public function build(ConsoleEvent $event): CommandChainInterface;
     public function getConfiguration(): array;
 }

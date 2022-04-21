@@ -6,6 +6,7 @@ use Ezi\CommandChainBundle\Exception\CommandExecutionException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CommandChain implements CommandChainInterface
@@ -14,6 +15,7 @@ class CommandChain implements CommandChainInterface
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
+
     /**
      * @var array
      */
@@ -37,7 +39,7 @@ class CommandChain implements CommandChainInterface
     {
         $result = Command::SUCCESS;
         foreach ($this->commandQueue as $name => $arr) {
-            $result = $arr['command']?->execute($arr['args'], $output);
+            $result = $arr['command']?->run($arr['args'], $output);
             if ($result !== Command::SUCCESS) {
                 throw new CommandExecutionException();
             }
@@ -51,9 +53,9 @@ class CommandChain implements CommandChainInterface
      * @param ArrayInput|null $args
      * @return CommandChain
      */
-    public function pushCommand(Command $command, ArrayInput $args = null): CommandChain
+    public function pushCommand(Command $command, ArrayInput|InputInterface $args = null): CommandChain
     {
-        $this->commandQueue[$command->getName()] = ['command' => $command, 'args' => $args];
+        $this->commandQueue[] = ['command' => $command, 'args' => $args];
         return $this;
     }
 }

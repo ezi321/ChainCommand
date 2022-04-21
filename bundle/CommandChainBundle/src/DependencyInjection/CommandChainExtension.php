@@ -12,7 +12,10 @@ class CommandChainExtension extends Extension
     const ALIAS = 'chain_commands';
 
     /**
-     * @inheritDoc
+     * @param array $configs
+     * @param ContainerBuilder $container
+     * @return void
+     * @throws \Exception
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -24,9 +27,10 @@ class CommandChainExtension extends Extension
         $container->getDefinition(
             "ezi.command_chain_subscriber"
         )->setArgument(2, $config);
+
         $container->getDefinition(
             "ezi.command_chain_builder"
-        )->setArgument(1, $config);
+        )->setArgument(2, $config);
     }
 
     public function getAlias()

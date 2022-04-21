@@ -2,7 +2,7 @@
 
 namespace Ezi\CommandChainBundle\Exception;
 
-class UnsupportedTypeException extends \Exception
+class NonExistentChainException extends \Exception
 {
 
 }

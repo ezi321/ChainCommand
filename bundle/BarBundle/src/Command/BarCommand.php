@@ -19,7 +19,7 @@ class BarCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('Bar command');
         return Command::SUCCESS;
     }
 }

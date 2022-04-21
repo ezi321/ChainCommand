@@ -4,7 +4,7 @@ chain_commands:
       commands:
         'foo:command': ~
         'bar:command': ~
-    test1:
+    'command:chain':
       commands:
         'foo:command': ~
         'bar:command': ~

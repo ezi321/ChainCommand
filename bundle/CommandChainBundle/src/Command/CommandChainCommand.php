@@ -15,10 +15,7 @@ use Ezi\CommandChainBundle\Attributes\CommandChain;
     name: 'command:chain',
     description: 'Console command that chain another commands',
 )]
-#[CommandChain(chains: [
-    ['command' => '', 'attributes' => null, 'priority' => 0],
-    ['command' => '', 'attributes' => null, 'priority' => 0],
-])]
+#[CommandChain(commands: ['foo:command' => [], 'bar:command' => []])]
 class CommandChainCommand extends Command
 {
     protected function configure(): void
@@ -42,7 +39,7 @@ class CommandChainCommand extends Command
             // ...
         }
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('Command chain');
 
         return Command::SUCCESS;
     }

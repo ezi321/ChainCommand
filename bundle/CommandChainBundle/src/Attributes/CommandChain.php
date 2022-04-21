@@ -15,9 +15,9 @@ class CommandChain
 {
     private array $configuration;
 
-    public function __construct(array $configuration)
+    public function __construct(array $commands)
     {
-        $this->configuration = $configuration;
+        $this->configuration = ['commands' => $commands];
     }
 
     /**
