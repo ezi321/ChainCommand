@@ -9,17 +9,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Ezi\CommandChainBundle\Attributes\CommandChain;
 
 #[AsCommand(
     name: 'command:chain',
     description: 'Console command that chain another commands',
 )]
+#[CommandChain(commands: ['foo:command' => [], 'bar:command' => []])]
 class CommandChainCommand extends Command
 {
     protected function configure(): void
     {
         $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
+            ->addArgument('arg1', InputArgument::IS_ARRAY, 'Argument description')
             ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
         ;
     }
@@ -37,7 +39,7 @@ class CommandChainCommand extends Command
             // ...
         }
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('Command chain');
 
         return Command::SUCCESS;
     }

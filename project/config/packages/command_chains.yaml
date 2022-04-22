@@ -1,0 +1,14 @@
+chain_commands:
+  chains:
+    default:
+      commands:
+        'foo:command': ~
+        'bar:command': ~
+    'command:chain':
+      commands:
+        'foo:command': ~
+        'bar:command': ~
+    test2:
+      commands:
+        'bar:command': ~
+        'foo:command': ~
