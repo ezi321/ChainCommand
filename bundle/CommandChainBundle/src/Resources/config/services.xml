@@ -27,10 +27,5 @@
             <tag name="kernel.event_listener" event="console.command"/>
         </service>
 
-        <service id="ezi.command_error_subscriber" class="Ezi\CommandChainBundle\EventSubscriber\ConsoleErrorSubscriber">
-            <argument key="$logger" type="service" id="logger" />
-            <tag name="kernel.event_listener" event="console.error"/>
-        </service>
-
     </services>
 </container>
