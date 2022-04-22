@@ -8,6 +8,7 @@
 /bundle/CommandChainBundle/vendor/
 /bundle/CommandChainBundle/.phpunit.result.cache
 /bundle/CommandChainBundle/.phpunit.cache/
+/bundle/CommandChainBundle/var/
 
 /project/composer.lock
 /project/var/symfony.lock
