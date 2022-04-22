@@ -21,10 +21,10 @@ services:
             - '../src/Kernel.php'
 
     Ezi\CommandChainBundle\Service\ChainBuilder:
-        $logger: "@monolog.handler.chain_commands"
+        $logger: "@monolog.logger"
 
     Ezi\CommandChainBundle\Service\CommandChain:
-        $logger: "@monolog.handler.chain_commands"
+        $logger: "@monolog.logger"
 
     #monolog.handler.chain_commands
     # add more service definitions when explicit configuration is needed
