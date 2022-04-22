@@ -20,4 +20,9 @@ class CommandChainBuilderTest extends KernelTestCase
         $builder = self::$container->get("ezi.command_chain_builder");
         $this->assertInstanceOf(ChainBuilderInterface::class, $builder);
     }
+
+    public function testChainBuilding()
+    {
+        $this->markTestSkipped('Write later');
+    }
 }

@@ -26,6 +26,16 @@ class CommandChainTest extends KernelTestCase
 
     public function testCommandChainInitialize()
     {
+        $this->markTestSkipped('Write later');
+    }
 
+    public function testExecution()
+    {
+        $this->markTestSkipped('Write later');
+    }
+
+    public function testPushingCommand()
+    {
+        $this->markTestSkipped('Write later');
     }
 }

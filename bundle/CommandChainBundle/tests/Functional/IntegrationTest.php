@@ -19,16 +19,5 @@ class IntegrationTest extends KernelTestCase
     {
         $bundle = self::$kernel->getBundle('CommandChainBundle');
         $this->assertInstanceOf(CommandChainBundle::class, $bundle);
-//        $application = new Application($kernel);
-//        $command = $application->find('command:chain');
-//        $commandTester = new CommandTester($command);
-//        $commandTester->execute([]);
-//
-//        $commandTester->assertCommandIsSuccessful();
-
-        // the output of the command in the console
-//        $output = $commandTester->getDisplay();
-//        $this->assertStringContainsString('Username: Wouter', $output);
-
     }
 }
