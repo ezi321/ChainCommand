@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns:acme_demo="http://www.example.com/symfony/schema/"
-           xsi:schemaLocation="http://www.example.com/symfony/schema/ https://www.example.com/symfony/schema/hello-1.0.xsd">
+           xsi:schemaLocation="https://www.example.com/symfony/schema/hello-1.0.xsd">
 
     <services>
 
@@ -21,7 +20,7 @@
             <tag name="console.command" />
         </service>
 
-        <service id="ezi.command_chain_subscriber" class="Ezi\CommandChainBundle\EventSubscriber\ConsoleCommandSubscriber">
+        <service id="ezi.command_chain_subscriber" class="Ezi\CommandChainBundle\EventSubscriber\ConsoleCommandSubscriber" public="true">
             <argument key="$logger" type="service" id="logger" />
             <argument key="$chainBuilder" type="service" id="ezi.command_chain_builder" />
             <tag name="kernel.event_listener" event="console.command"/>

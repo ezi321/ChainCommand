@@ -33,7 +33,7 @@ class CommandChainExtension extends Extension
         )->setArgument(2, $config);
     }
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return self::ALIAS;
     }

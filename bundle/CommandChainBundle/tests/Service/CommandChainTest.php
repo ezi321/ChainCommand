@@ -2,13 +2,30 @@
 
 namespace Ezi\CommandChainBundle\Tests\Service;
 
-use PHPUnit\Framework\TestCase;
+use Ezi\CommandChainBundle\Service\CommandChainInterface;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class CommandChainTest extends TestCase
+class CommandChainTest extends KernelTestCase
 {
-    public function testSomething(): void
+    public function commandChainProvider()
     {
-        //$routerService = static::getContainer()->get('router');
-        //$myCustomService = static::getContainer()->get(CustomService::class);
+
+    }
+
+    protected function setUp(): void
+    {
+        self::$kernel = self::bootKernel();
+        self::$container = self::$kernel->getContainer();
+    }
+
+    public function testCommandChainWiring(): void
+    {
+        $subscriber = self::$container->get("ezi.command_chain");
+        $this->assertInstanceOf(CommandChainInterface::class, $subscriber);
+    }
+
+    public function testCommandChainInitialize()
+    {
+
     }
 }
