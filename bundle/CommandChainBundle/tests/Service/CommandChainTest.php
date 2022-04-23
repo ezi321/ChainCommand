@@ -18,12 +18,6 @@ class CommandChainTest extends KernelTestCase
         self::$container = self::$kernel->getContainer();
     }
 
-    public function testCommandChainWiring(): void
-    {
-        $subscriber = self::$container->get("ezi.command_chain");
-        $this->assertInstanceOf(CommandChainInterface::class, $subscriber);
-    }
-
     public function testCommandChainInitialize()
     {
         $this->markTestSkipped('Write later');

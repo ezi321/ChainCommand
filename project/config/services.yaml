@@ -20,9 +20,6 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    Ezi\CommandChainBundle\Service\ChainBuilder:
-        $logger: "@monolog.logger"
-
     Ezi\CommandChainBundle\Service\CommandChain:
         $logger: "@monolog.logger"
 

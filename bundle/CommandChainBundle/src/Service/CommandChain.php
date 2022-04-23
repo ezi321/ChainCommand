@@ -46,6 +46,7 @@ class CommandChain implements CommandChainInterface
             $out = $output->fetch();
 
             $this->logger->info(trim($out));
+
             $output->write($out);
 
             if ($result !== Command::SUCCESS) {
@@ -54,8 +55,8 @@ class CommandChain implements CommandChainInterface
         }
 
         $this->logger->info(
-            reset($this->commandQueue)['command']->getName() . ' end executing',
-            [date('Y-M-D h:i:s')]
+            reset($this->commandQueue)['command']->getName() .
+            ' end executing'
         );
 
         return $result;
