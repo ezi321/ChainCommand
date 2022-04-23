@@ -5,23 +5,29 @@ namespace Ezi\CommandChainBundle\Service;
 use Ezi\CommandChainBundle\Attributes\CommandChain;
 use Ezi\CommandChainBundle\Exception\NonExistentChainException;
 use Ezi\CommandChainBundle\Exception\NotExecutableCommandException;
-use Ezi\CommandChainBundle\Service\ChainBuilderInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Event\ConsoleEvent;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 
 class ChainBuilder implements ChainBuilderInterface
 {
+    /**
+     * @var CommandChainInterface
+     */
     private CommandChainInterface $commandChain;
 
+    /**
+     * @var array
+     */
     private array $configuration;
 
+    /**
+     * @param CommandChainInterface $commandChain
+     * @param array $configuration
+     */
     public function __construct(CommandChainInterface $commandChain, array $configuration)
     {
-        $this->commandChain = $commandChain;
+        $this->commandChain  = $commandChain;
         $this->configuration = $configuration;
     }
 
@@ -41,31 +47,30 @@ class ChainBuilder implements ChainBuilderInterface
         return $this->commandChain;
     }
 
+    /**
+     * @param Command $mainCommand
+     * @param InputInterface $mainInput
+     * @return CommandChainInterface|null
+     * @throws NotExecutableCommandException
+     * @throws \ReflectionException
+     */
     public function build(Command $mainCommand, InputInterface $mainInput): ?CommandChainInterface
     {
-        $config = $this->getConfiguration();
         $this->mergeConfiguration($mainCommand);
 
         if($this->isCommandInChain($mainCommand->getName())) {
             throw new NotExecutableCommandException();
         }
 
-        if(array_key_exists($mainCommand->getName(), $this->configuration['chains'])) {
-
-            $chainName = $mainCommand->getName();
-
-            if (!array_key_exists($chainName, $config['chains'])) {
-                throw new NonExistentChainException();
-            }
-
-            return $this->pushCommands($mainCommand, $mainInput)->getCommandChain();
-
-        } else {
-            return null;
-        }
+        return $this->pushChildCommands($mainCommand, $mainInput)->getCommandChain();
     }
 
-    private function pushCommands(Command $mainCommand, InputInterface $mainInput)
+    /**
+     * @param Command $mainCommand
+     * @param InputInterface $mainInput
+     * @return $this
+     */
+    private function pushChildCommands(Command $mainCommand, InputInterface $mainInput): self
     {
         $chainName = $mainCommand->getName();
         $config    = $this->getConfiguration();
@@ -82,6 +87,11 @@ class ChainBuilder implements ChainBuilderInterface
         return $this;
     }
 
+    /**
+     * @param Command $command
+     * @return \ReflectionAttribute|null
+     * @throws \ReflectionException
+     */
     private function getCommandAttributes(Command $command): ?\ReflectionAttribute
     {
         $reflect = new \ReflectionClass($command::class);
@@ -109,6 +119,10 @@ class ChainBuilder implements ChainBuilderInterface
         }
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     private function isCommandInChain(string $name)
     {
         $configuration = $this->configuration['chains'];

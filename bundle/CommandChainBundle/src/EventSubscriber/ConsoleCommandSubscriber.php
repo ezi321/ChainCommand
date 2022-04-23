@@ -25,13 +25,18 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
 
     public function onConsoleCommand(ConsoleCommandEvent $event)
     {
-        $chain = $this->chainBuilder->build($event->getCommand(), $event->getInput());
+        $chain = $this->chainBuilder->build(
+            $event->getCommand(),
+            $event->getInput()
+        );
 
         if($chain instanceof CommandChainInterface) {
             $output = new BufferedOutput();
             $event->disableCommand();
             $chain->execute($output);
-            $event->getOutput()->write($output->fetch());
+
+            $event->getOutput()
+                  ->write($output->fetch());
         }
     }
 

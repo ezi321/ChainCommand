@@ -14,7 +14,7 @@ class CommandChainTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        self::$kernel = self::bootKernel();
+        self::$kernel    = self::bootKernel();
         self::$container = self::$kernel->getContainer();
     }
 

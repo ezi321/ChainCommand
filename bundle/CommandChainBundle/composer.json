@@ -27,7 +27,6 @@
         "symfony/monolog-bundle": "^3.0.0",
         "symfony/event-dispatcher": "^5.4",
         "symfony/var-dumper": "^5.4",
-        "symfony/test-pack": "dev-main",
-        "phpspec/prophecy": "~1.0"
+        "symfony/test-pack": "dev-main"
     }
 }
