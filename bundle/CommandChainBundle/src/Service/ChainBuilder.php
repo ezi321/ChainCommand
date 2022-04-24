@@ -3,9 +3,9 @@
 namespace Ezi\CommandChainBundle\Service;
 
 use Ezi\CommandChainBundle\Attributes\CommandChain;
-use Ezi\CommandChainBundle\Exception\NonExistentChainException;
 use Ezi\CommandChainBundle\Exception\NotExecutableCommandException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -80,6 +80,11 @@ class ChainBuilder implements ChainBuilderInterface
 
         foreach ($config['chains'][$chainName]['commands'] as $commandName => $args) {
             $command = $app->find($commandName);
+
+            if(!$command) {
+                throw new CommandNotFoundException("Command not found");
+            }
+
             $arrayInput = new ArrayInput($args);
             $this->commandChain->pushCommand($command, $arrayInput);
         }

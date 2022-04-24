@@ -73,4 +73,12 @@ class CommandChain implements CommandChainInterface
         $this->commandQueue[] = ['command' => $command, 'args' => $args];
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getCommandQueue(): array
+    {
+        return $this->commandQueue;
+    }
 }
