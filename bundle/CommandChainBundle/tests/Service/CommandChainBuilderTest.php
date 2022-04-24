@@ -97,6 +97,16 @@ class CommandChainBuilderTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider badCommandDataProvider
+     */
+    public function testCommandNotFoundExcetion(Command $mainCommand)
+    {
+        $this->expectExceptionMessage("Command not found");
+        $this->builder = new ChainBuilder($this->commandChain, $this->getBadConfiguration());
+        $this->builder->build($mainCommand, new ArrayInput([]));
+    }
+
+    /**
      * @return array[][]
      */
     private function commandsDataProvider()
@@ -108,16 +118,6 @@ class CommandChainBuilderTest extends KernelTestCase
         return [
             [$mainCommand, $command1, $command2]
         ];
-    }
-
-    /**
-     * @dataProvider badCommandDataProvider
-     */
-    public function testCommandNotFoundExcetion(Command $mainCommand)
-    {
-        $this->expectExceptionMessage("Command not found");
-        $this->builder = new ChainBuilder($this->commandChain, $this->getBadConfiguration());
-        $this->builder->build($mainCommand, new ArrayInput([]));
     }
 
     /**
