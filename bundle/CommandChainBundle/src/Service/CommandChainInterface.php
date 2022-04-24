@@ -21,4 +21,6 @@ interface CommandChainInterface
      * @return CommandChainInterface
      */
     public function pushCommand(Command $command, ArrayInput|InputInterface $input = null): CommandChainInterface;
+
+    public function setMasterCommand(Command $command, ArrayInput|InputInterface $input = null): CommandChainInterface;
 }

@@ -25,15 +25,11 @@ class CommandChainExtension extends Extension
         $config = $this->processConfiguration($configurartion, $configs);
 
         $container->getDefinition(
-            "ezi.command_chain_subscriber"
-        )->setArgument(2, $config);
-
-        $container->getDefinition(
             "ezi.command_chain_builder"
-        )->setArgument(2, $config);
+        )->setArgument(1, $config);
     }
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return self::ALIAS;
     }

@@ -11,10 +11,13 @@ use Symfony\Component\Console\Event\ConsoleEvent;
 use Ezi\CommandChainBundle\Service\CommandChain as ChainCommands;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
-class CommandChain
+class CommandChain implements CommandChainAttributeInterface
 {
     private array $configuration;
 
+    /**
+     * @param array $commands
+     */
     public function __construct(array $commands)
     {
         $this->configuration = ['commands' => $commands];
