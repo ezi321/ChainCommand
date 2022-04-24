@@ -57,9 +57,14 @@ class ChainBuilder implements ChainBuilderInterface
     public function build(Command $mainCommand, InputInterface $mainInput): ?CommandChainInterface
     {
         $this->mergeConfiguration($mainCommand);
-
-        if($this->isCommandInChain($mainCommand->getName())) {
-            throw new NotExecutableCommandException();
+        $commandName = $mainCommand->getName();
+        $chain = $this->getChainByCommand($commandName);
+        if($chain) {
+            throw new NotExecutableCommandException(
+                "Error: {$commandName} "  .
+                "command is a member of {$chain} ".
+                "command chain and cannot be executed on its own."
+            );
         }
 
         return $this->pushChildCommands($mainCommand, $mainInput)->getCommandChain();
@@ -76,17 +81,16 @@ class ChainBuilder implements ChainBuilderInterface
         $config    = $this->getConfiguration();
         $app       = $mainCommand->getApplication();
 
-        $this->commandChain->pushCommand($mainCommand, $mainInput);
+        $this->commandChain->setMasterCommand($mainCommand, $mainInput);
 
         foreach ($config['chains'][$chainName]['commands'] as $commandName => $args) {
-            $command = $app->find($commandName);
-
-            if(!$command) {
+            try {
+                $command = $app->find($commandName);
+                $arrayInput = new ArrayInput($args);
+                $this->commandChain->pushCommand($command, $arrayInput);
+            } catch (\Exception $e) {
                 throw new CommandNotFoundException("Command not found");
             }
-
-            $arrayInput = new ArrayInput($args);
-            $this->commandChain->pushCommand($command, $arrayInput);
         }
 
         return $this;
@@ -128,14 +132,14 @@ class ChainBuilder implements ChainBuilderInterface
      * @param string $name
      * @return bool
      */
-    private function isCommandInChain(string $name)
+    private function getChainByCommand(string $name): ?string
     {
         $configuration = $this->configuration['chains'];
         foreach($configuration as $chain => $value) {
             if(array_key_exists($name, $value['commands'])) {
-                return true;
+                return $chain;
             }
         }
-        return false;
+        return null;
     }
 }

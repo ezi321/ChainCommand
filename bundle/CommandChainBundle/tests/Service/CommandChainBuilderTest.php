@@ -15,20 +15,20 @@ use Symfony\Component\Console\Input\ArrayInput;
 
 class CommandChainBuilderTest extends KernelTestCase
 {
-    private $commandChain;
-    private $builder;
+    private CommandChainService $commandChain;
+    private ChainBuilder $builder;
     private $logger;
-    private static $app;
+    private Application $app;
 
     protected function setUp(): void
     {
         self::$kernel       = self::bootKernel();
         self::$container    = self::$kernel->getContainer();
-        self::$app = new Application(self::$kernel);
-        self::$app->add(new TestCommandChain());
-        self::$app->add(new TestCommand1());
-        self::$app->add(new TestCommand2());
-        self::$app->add(new TestBadCommand());
+        $this->app = new Application(self::$kernel);
+        $this->app->add(new TestCommandChain());
+        $this->app->add(new TestCommand1());
+        $this->app->add(new TestCommand2());
+        $this->app->add(new TestBadCommand());
         $this->logger       = $this->createMock(LoggerInterface::class);
         $this->commandChain = new CommandChainService($this->logger);
         $this->builder      = new ChainBuilder($this->commandChain, $this->getConfiguration());
@@ -49,43 +49,41 @@ class CommandChainBuilderTest extends KernelTestCase
 
     public function testBuldChain()
     {
-        $commandChain = $this->builder->build(self::$app->find("test:command:chain"), new ArrayInput([]));
+        $commandChain = $this->builder->build($this->app->find("test:command:chain"), new ArrayInput([]));
         $this->assertInstanceOf(CommandChainInterface::class, $commandChain);
     }
 
     public function testBuildChainLength()
     {
-        $commandChain = $this->builder->build(self::$app->find("test:command:chain"), new ArrayInput([]));
-        $this->assertCount(3, $commandChain?->getCommandQueue());
+        $commandChain = $this->builder->build($this->app->find("test:command:chain"), new ArrayInput([]));
+        $this->assertCount(2, $commandChain?->getCommandQueue());
     }
 
     /**
-     * @param Command $mainCommand
-     * @param Command $command1
-     * @param Command $command2
-     * @return void
-     * @throws \Ezi\CommandChainBundle\Exception\NotExecutableCommandException
-     * @throws \ReflectionException
      * @dataProvider commandsDataProvider
      */
-    public function testIsAllCommandContainsInChain(Command $mainCommand, Command $command1, Command $command2)
+    public function testIsMasterCommandIsEqMaster(Command $masterCommand)
     {
-        $commandChain = $this->builder->build($mainCommand, new ArrayInput([]));
+        $commandChain = $this->builder->build($masterCommand, new ArrayInput([]));
+
+        $this->assertEquals($commandChain->getMasterCommand(), $masterCommand);
+    }
+
+    /**
+     * @dataProvider commandsDataProvider
+     */
+    public function testIsAllCommandContainsInChain(Command $masterCommand, Command $command1, Command $command2)
+    {
+        $commandChain = $this->builder->build($masterCommand, new ArrayInput([]));
 
         $commands = $commandChain->getCommandQueue();
 
-        $this->assertEquals($mainCommand->getName(), array_shift($commands)['command']->getName());
+        $this->assertEquals($masterCommand->getName(), $commandChain->getMasterCommand()->getName());
         $this->assertEquals($command1->getName(), array_shift($commands)['command']->getName());
         $this->assertEquals($command2->getName(), array_shift($commands)['command']->getName());
     }
 
     /**
-     * @param Command $mainCommand
-     * @param Command $command1
-     * @param Command $command2
-     * @return void
-     * @throws \Ezi\CommandChainBundle\Exception\NotExecutableCommandException
-     * @throws \ReflectionException
      * @dataProvider badCommandDataProvider
      */
     public function testIsNotChainCommandNotInChain(Command $mainCommand, Command $badCommand)
@@ -98,19 +96,21 @@ class CommandChainBuilderTest extends KernelTestCase
         }
     }
 
+    /**
+     * @return array[][]
+     */
     private function commandsDataProvider()
     {
         $this->setUp();
-        $mainCommand = self::$app->find("test:command:chain");
-        $command1 = self::$app->find("test:command1");
-        $command2 = self::$app->find("test:command2");
+        $mainCommand = $this->app->find("test:command:chain");
+        $command1 = $this->app->find("test:command1");
+        $command2 = $this->app->find("test:command2");
         return [
             [$mainCommand, $command1, $command2]
         ];
     }
 
     /**
-     * @return void
      * @dataProvider badCommandDataProvider
      */
     public function testCommandNotFoundExcetion(Command $mainCommand)
@@ -120,11 +120,14 @@ class CommandChainBuilderTest extends KernelTestCase
         $this->builder->build($mainCommand, new ArrayInput([]));
     }
 
+    /**
+     * @return array[][]
+     */
     private function badCommandDataProvider()
     {
         $this->setUp();
-        $mainCommand = self::$app->find("test:command:chain");
-        $badCommand = self::$app->find("qwe");
+        $mainCommand = $this->app->find("test:command:chain");
+        $badCommand = $this->app->find("qwe");
         return [
             [$mainCommand, $badCommand]
         ];

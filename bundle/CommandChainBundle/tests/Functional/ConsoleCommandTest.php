@@ -48,6 +48,23 @@ class ConsoleCommandTest extends KernelTestCase
             ]
         ]];
     }
+
+    /**
+     * @return \array[][][][]
+     */
+    private function getConfiguration(): array
+    {
+        return [
+            "chains" => [
+                "test:command:chain" => [
+                    "commands" => [
+                        "test:command1" => [],
+                        "test:command2" => []
+                    ]
+                ]
+            ]
+        ];
+    }
 }
 
 #[AsCommand(

@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'bar:command',
+    name: 'bar:hi',
     description: 'Test bar command',
 )]
 class BarCommand extends Command
@@ -19,7 +19,7 @@ class BarCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->success('Bar command');
+        $io->success('Hi from Bar!');
         return Command::SUCCESS;
     }
 }
