@@ -9,6 +9,8 @@
 /bundle/CommandChainBundle/.phpunit.result.cache
 /bundle/CommandChainBundle/.phpunit.cache/
 /bundle/CommandChainBundle/var/
+/bundle/CommandChainBundle/.phive/
+/bundle/CommandChainBundle/tools/
 
 /project/composer.lock
 /project/var/symfony.lock

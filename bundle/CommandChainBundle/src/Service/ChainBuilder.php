@@ -56,7 +56,6 @@ class ChainBuilder implements ChainBuilderInterface
      */
     public function build(Command $mainCommand, InputInterface $mainInput): ?CommandChainInterface
     {
-        //@TODO add if statement
         $this->mergeConfiguration($mainCommand);
         $commandName = $mainCommand->getName();
         $config      = $this->getConfiguration();
@@ -84,7 +83,6 @@ class ChainBuilder implements ChainBuilderInterface
      * @param Command $mainCommand
      * @param InputInterface $mainInput
      * @return $this
-     * @TODO Fix In ChainBuilder.php line 86: Warning: Undefined array key "cache:clear"
      */
     private function pushCommands(Command $mainCommand, InputInterface $mainInput): self
     {
@@ -141,7 +139,7 @@ class ChainBuilder implements ChainBuilderInterface
 
     /**
      * @param string $name
-     * @return bool
+     * @return string|null
      */
     private function getChainByCommand(string $name): ?string
     {
