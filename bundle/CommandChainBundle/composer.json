@@ -21,11 +21,12 @@
     ],
     "minimum-stability": "dev",
     "require-dev": {
-        "symfony/phpunit-bridge": "^5.4",
         "symfony/console": "^5.4",
+        "symfony/framework-bundle": "^5.4",
         "symfony/http-kernel": "^5.4",
         "symfony/monolog-bundle": "^3.0.0",
         "symfony/event-dispatcher": "^5.4",
-        "symfony/var-dumper": "^5.4"
+        "symfony/var-dumper": "^5.4",
+        "symfony/test-pack": "dev-main"
     }
 }

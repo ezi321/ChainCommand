@@ -2,25 +2,29 @@
 
 namespace Ezi\CommandChainBundle\Attributes;
 
-use Ezi\CommandChainBundle\Service\ChainBuilder;
-use Ezi\CommandChainBundle\Service\ChainBuilderInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Event\ConsoleEvent;
-use Ezi\CommandChainBundle\Service\CommandChain as ChainCommands;
-
+/**
+ * Attribute class that provide command chain configuration by attribute
+ */
 #[\Attribute(\Attribute::TARGET_CLASS)]
-class CommandChain
+class CommandChain implements CommandChainAttributeInterface
 {
+    /**
+     * Configuration from attribute
+     * @var array[]
+     */
     private array $configuration;
 
+    /**
+     * Configuration commands chain array from attribute provides to master command
+     * @param array $commands
+     */
     public function __construct(array $commands)
     {
         $this->configuration = ['commands' => $commands];
     }
 
     /**
+     * Getter to configuration array
      * @return array
      */
     public function getConfiguration(): array
