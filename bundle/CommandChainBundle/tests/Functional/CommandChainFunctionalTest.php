@@ -6,7 +6,6 @@ use Ezi\CommandChainBundle\Attributes\CommandChain;
 use Ezi\CommandChainBundle\Exception\NotExecutableCommandException;
 use Ezi\CommandChainBundle\Service\CommandChain as CommandChainService;
 use Ezi\CommandChainBundle\Service\ChainBuilder;
-use Ezi\CommandChainBundle\Service\CommandChainInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -58,7 +57,7 @@ class CommandChainFunctionalTest extends KernelTestCase
     /**
      * @return void
      */
-    public function testFailChainCommandOutputContainsAllOutputsCommansFromChain()
+    public function testFailExecutionMasterThatContainsInChain()
     {
         $this->expectException(NotExecutableCommandException::class);
         $this->expectExceptionMessage(
