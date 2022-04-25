@@ -20,7 +20,7 @@
         "ezi/command-chain-bundle": "@dev",
         "ezi/foo-bundle": "@dev",
         "symfony/browser-kit": "5.4.*",
-        "symfony/css-selector": "5.4.*",
+        "symfony/css-selector": "5.4.*"
     },
     "config": {
         "allow-plugins": {

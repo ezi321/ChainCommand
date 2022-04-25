@@ -1,7 +1,4 @@
 {
-    "doctrine/inflector": {
-        "version": "2.0.4"
-    },
     "ezi/bar-bundle": {
         "version": "dev-develop"
     },
@@ -13,9 +10,6 @@
     },
     "monolog/monolog": {
         "version": "2.5.0"
-    },
-    "nikic/php-parser": {
-        "version": "v4.13.2"
     },
     "psr/cache": {
         "version": "2.0.0"
@@ -119,15 +113,6 @@
     },
     "symfony/http-kernel": {
         "version": "v5.4.7"
-    },
-    "symfony/maker-bundle": {
-        "version": "1.38",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.0",
-            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
-        }
     },
     "symfony/monolog-bridge": {
         "version": "v5.4.3"

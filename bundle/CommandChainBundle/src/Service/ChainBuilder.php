@@ -56,26 +56,37 @@ class ChainBuilder implements ChainBuilderInterface
      */
     public function build(Command $mainCommand, InputInterface $mainInput): ?CommandChainInterface
     {
+        //@TODO add if statement
         $this->mergeConfiguration($mainCommand);
         $commandName = $mainCommand->getName();
-        $chain = $this->getChainByCommand($commandName);
-        if($chain) {
+        $config      = $this->getConfiguration();
+        $chain       = $this->getChainByCommand($commandName);
+        $returnValue = null;
+
+        if ($chain) {
             throw new NotExecutableCommandException(
-                "Error: {$commandName} "  .
-                "command is a member of {$chain} ".
+                "Error: {$commandName} " .
+                "command is a member of {$chain} " .
                 "command chain and cannot be executed on its own."
             );
         }
 
-        return $this->pushChildCommands($mainCommand, $mainInput)->getCommandChain();
+        if(array_key_exists($commandName, $config['chains'])) {
+            $returnValue = $this
+                ->pushCommands($mainCommand, $mainInput)
+                ->getCommandChain();
+        }
+
+        return $returnValue;
     }
 
     /**
      * @param Command $mainCommand
      * @param InputInterface $mainInput
      * @return $this
+     * @TODO Fix In ChainBuilder.php line 86: Warning: Undefined array key "cache:clear"
      */
-    private function pushChildCommands(Command $mainCommand, InputInterface $mainInput): self
+    private function pushCommands(Command $mainCommand, InputInterface $mainInput): self
     {
         $chainName = $mainCommand->getName();
         $config    = $this->getConfiguration();
