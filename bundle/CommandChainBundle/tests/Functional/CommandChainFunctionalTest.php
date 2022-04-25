@@ -1,8 +1,9 @@
 <?php
 
-namespace Ezi\CommandChainBundle\Tests\Service;
+namespace Ezi\CommandChainBundle\Tests\Functional;
 
 use Ezi\CommandChainBundle\Attributes\CommandChain;
+use Ezi\CommandChainBundle\Exception\NotExecutableCommandException;
 use Ezi\CommandChainBundle\Service\CommandChain as CommandChainService;
 use Ezi\CommandChainBundle\Service\ChainBuilder;
 use Ezi\CommandChainBundle\Service\CommandChainInterface;
@@ -12,125 +13,64 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CommandChainBuilderTest extends KernelTestCase
+class CommandChainFunctionalTest extends KernelTestCase
 {
     private CommandChainService $commandChain;
     private ChainBuilder $builder;
-    private $logger;
     private Application $app;
 
     protected function setUp(): void
     {
         self::$kernel       = self::bootKernel();
         self::$container    = self::$kernel->getContainer();
+
         $this->app = new Application(self::$kernel);
         $this->app->add(new TestCommandChain());
         $this->app->add(new TestCommand1());
         $this->app->add(new TestCommand2());
-        $this->app->add(new TestBadCommand());
-        $this->logger       = $this->createMock(LoggerInterface::class);
-        $this->commandChain = new CommandChainService($this->logger);
+
+        $logger             = $this->createMock(LoggerInterface::class);
+        $this->commandChain = new CommandChainService($logger);
         $this->builder      = new ChainBuilder($this->commandChain, $this->getConfiguration());
     }
 
     /**
      * @return void
      */
-    public function testChainBuilderInstatntiable()
+    public function testChainCommandOutputContainsAllOutputsCommansFromChain()
     {
-        $this->assertInstanceOf(ChainBuilder::class, $this->builder);
-    }
-
-    public function testGetConfigurationFromBuilder()
-    {
-        $this->assertEquals($this->getConfiguration(), $this->builder->getConfiguration());
-    }
-
-    public function testBuldChain()
-    {
-        $commandChain = $this->builder->build($this->app->find("test:command:chain"), new ArrayInput([]));
-        $this->assertInstanceOf(CommandChainInterface::class, $commandChain);
-    }
-
-    public function testBuildChainLength()
-    {
-        $commandChain = $this->builder->build($this->app->find("test:command:chain"), new ArrayInput([]));
-        $this->assertCount(2, $commandChain?->getCommandQueue());
+        $master = $this->app->get('test:command:chain');
+        $input  = new ArrayInput([]);
+        $output = new BufferedOutput();
+        $commandChain = $this->builder->build($master, $input);
+        $commandChain->execute($output);
+        $out = $output->fetch();
+        $this->assertTrue(str_contains($out, 'test:command:chain'));
+        $this->assertTrue(str_contains($out, 'test:command1'));
+        $this->assertTrue(str_contains($out, 'test:command2'));
     }
 
     /**
-     * @dataProvider commandsDataProvider
+     * @return void
      */
-    public function testIsMasterCommandIsEqMaster(Command $masterCommand)
+    public function testFailChainCommandOutputContainsAllOutputsCommansFromChain()
     {
-        $commandChain = $this->builder->build($masterCommand, new ArrayInput([]));
+        $this->expectException(NotExecutableCommandException::class);
+        $this->expectExceptionMessage(
+            'Error: test:command1 command is a member of '.
+            'test:command:chain command chain and cannot be executed on its own.'
+        );
 
-        $this->assertEquals($commandChain->getMasterCommand(), $masterCommand);
-    }
-
-    /**
-     * @dataProvider commandsDataProvider
-     */
-    public function testIsAllCommandContainsInChain(Command $masterCommand, Command $command1, Command $command2)
-    {
-        $commandChain = $this->builder->build($masterCommand, new ArrayInput([]));
-
-        $commands = $commandChain->getCommandQueue();
-
-        $this->assertEquals($masterCommand->getName(), $commandChain->getMasterCommand()->getName());
-        $this->assertEquals($command1->getName(), array_shift($commands)['command']->getName());
-        $this->assertEquals($command2->getName(), array_shift($commands)['command']->getName());
-    }
-
-    /**
-     * @dataProvider badCommandDataProvider
-     */
-    public function testIsNotChainCommandNotInChain(Command $mainCommand, Command $badCommand)
-    {
-        $commandChain = $this->builder->build($mainCommand, new ArrayInput([]));
-        $commands = $commandChain->getCommandQueue();
-
-        foreach ($commands as $item) {
-            $this->assertFalse(in_array($badCommand->getName(), $item));
-        }
-    }
-
-    /**
-     * @dataProvider badCommandDataProvider
-     */
-    public function testCommandNotFoundExcetion(Command $mainCommand)
-    {
-        $this->expectExceptionMessage("Command not found");
-        $this->builder = new ChainBuilder($this->commandChain, $this->getBadConfiguration());
-        $this->builder->build($mainCommand, new ArrayInput([]));
-    }
-
-    /**
-     * @return array[][]
-     */
-    private function commandsDataProvider()
-    {
-        $this->setUp();
-        $mainCommand = $this->app->find("test:command:chain");
-        $command1 = $this->app->find("test:command1");
-        $command2 = $this->app->find("test:command2");
-        return [
-            [$mainCommand, $command1, $command2]
-        ];
-    }
-
-    /**
-     * @return array[][]
-     */
-    private function badCommandDataProvider()
-    {
-        $this->setUp();
-        $mainCommand = $this->app->find("test:command:chain");
-        $badCommand = $this->app->find("qwe");
-        return [
-            [$mainCommand, $badCommand]
-        ];
+        $master = $this->app->get('test:command1');
+        $input  = new ArrayInput([]);
+        $output = new BufferedOutput();
+        $commandChain = $this->builder->build($master, $input);
+        $commandChain->execute($output);
     }
 
     /**
@@ -149,41 +89,20 @@ class CommandChainBuilderTest extends KernelTestCase
            ]
         ];
     }
-
-    /**
-     * @return \array[][][][]
-     */
-    private function getBadConfiguration(): array
-    {
-        return [
-            "chains" => [
-                "test:command:chain" => [
-                    "commands" => [
-                        "bar:command" => [],
-                        "foo:command" => []
-                    ]
-                ]
-            ]
-        ];
-    }
 }
 
 #[AsCommand(
     name: 'test:command:chain',
-    description: 'Console test:command:chain command',
 )]
 #[CommandChain(commands: ['test:command1' => [], 'test:command2' => []])]
 class TestCommandChain extends Command
 {
-}
-
-#[AsCommand(
-    name: 'qwe',
-    description: 'Console test:command:chain command',
-)]
-#[CommandChain(commands: ['test:command1' => [], 'test:command2' => []])]
-class TestBadCommand extends Command
-{
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $io = new SymfonyStyle($input, $output);
+        $io->write('test:command:chain');
+        return Command::SUCCESS;
+    }
 }
 
 #[AsCommand(
@@ -191,6 +110,12 @@ class TestBadCommand extends Command
 )]
 class TestCommand1 extends Command
 {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $io = new SymfonyStyle($input, $output);
+        $io->write('test:command1');
+        return Command::SUCCESS;
+    }
 }
 
 #[AsCommand(
@@ -198,4 +123,10 @@ class TestCommand1 extends Command
 )]
 class TestCommand2 extends Command
 {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $io = new SymfonyStyle($input, $output);
+        $io->write('test:command2');
+        return Command::SUCCESS;
+    }
 }
