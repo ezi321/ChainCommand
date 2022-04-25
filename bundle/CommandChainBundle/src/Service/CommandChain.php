@@ -10,6 +10,10 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Implementation of command chain interface
+ * @see CommandChainInterface
+ */
 class CommandChain implements CommandChainInterface
 {
     /**
@@ -37,6 +41,9 @@ class CommandChain implements CommandChainInterface
     }
 
     /**
+     * Method that simplify executing and logging chain commands,
+     * as chain is one composite command
+     *
      * @param OutputInterface $output
      * @return int
      * @throws CommandExecutionException
@@ -57,6 +64,8 @@ class CommandChain implements CommandChainInterface
     }
 
     /**
+     * Method that push child command to chain
+     *
      * @param Command $command
      * @param ArrayInput|InputInterface|null $args
      * @return CommandChain
@@ -82,6 +91,12 @@ class CommandChain implements CommandChainInterface
         return $this;
     }
 
+    /**
+     * Method that set master command that executing first
+     * @param Command $command
+     * @param ArrayInput|InputInterface|null $args
+     * @return $this
+     */
     public function setMasterCommand(Command $command, ArrayInput|InputInterface $args = null): CommandChain
     {
         $name = $command->getName();
@@ -94,19 +109,30 @@ class CommandChain implements CommandChainInterface
         return $this;
     }
 
+    /**
+     * Getter to master command field
+     * @return Command|null
+     */
     public function getMasterCommand(): ?Command
     {
         return $this->master['command'];
     }
 
     /**
-     * @return array
+     * Getter to command chain array[Command, InputInterface]
+     * @return array<Command, InputInterface>
      */
     public function getCommandQueue(): array
     {
         return $this->commandQueue;
     }
 
+    /**
+     * Method that execute master command
+     * @param OutputInterface $output
+     * @return OutputInterface
+     * @throws CommandExecutionException
+     */
     private function executeMasterCommand(OutputInterface $output): OutputInterface
     {
         $command = $this->master['command'];
@@ -116,6 +142,12 @@ class CommandChain implements CommandChainInterface
         return $this->run($command, $args, $output);
     }
 
+    /**
+     * Method that execute child chain commands
+     * @param OutputInterface $output
+     * @return OutputInterface
+     * @throws CommandExecutionException
+     */
     private function executeCommands(OutputInterface $output): OutputInterface
     {
         $chainName = $this->master['command']->getName();
@@ -130,7 +162,15 @@ class CommandChain implements CommandChainInterface
         $this->logger->info("Execution of {$chainName} chain completed.");
         return $output;
     }
-    
+
+    /**
+     * Method that run one command and return output buffer
+     * @param Command $command
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return OutputInterface
+     * @throws CommandExecutionException
+     */
     private function run(Command $command, InputInterface $input, OutputInterface $output): OutputInterface
     {
         $result = $command->run($input, $output);

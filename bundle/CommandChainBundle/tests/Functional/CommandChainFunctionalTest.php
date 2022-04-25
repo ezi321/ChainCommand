@@ -38,9 +38,6 @@ class CommandChainFunctionalTest extends KernelTestCase
         $this->builder      = new ChainBuilder($this->commandChain, $this->getConfiguration());
     }
 
-    /**
-     * @return void
-     */
     public function testChainCommandOutputContainsAllOutputsCommansFromChain()
     {
         $master = $this->app->get('test:command:chain');
@@ -54,9 +51,6 @@ class CommandChainFunctionalTest extends KernelTestCase
         $this->assertTrue(str_contains($out, 'test:command2'));
     }
 
-    /**
-     * @return void
-     */
     public function testFailExecutionMasterThatContainsInChain()
     {
         $this->expectException(NotExecutableCommandException::class);
