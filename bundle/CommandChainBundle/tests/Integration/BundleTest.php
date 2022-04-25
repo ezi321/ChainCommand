@@ -1,6 +1,6 @@
 <?php
 
-namespace Ezi\CommandChainBundle\Tests\Functional;
+namespace Ezi\CommandChainBundle\Tests\Integration;
 
 use Ezi\CommandChainBundle\CommandChainBundle;
 use Ezi\CommandChainBundle\EventSubscriber\ConsoleCommandSubscriber;
@@ -8,7 +8,7 @@ use Ezi\CommandChainBundle\Service\ChainBuilderInterface;
 use Ezi\CommandChainBundle\Service\CommandChainInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class IntegrationTest extends KernelTestCase
+class BundleTest extends KernelTestCase
 {
     protected function setUp(): void
     {

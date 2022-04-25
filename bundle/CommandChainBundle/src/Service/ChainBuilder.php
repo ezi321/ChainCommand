@@ -9,6 +9,9 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 
+/**
+ * Class that build chain of commands
+ */
 class ChainBuilder implements ChainBuilderInterface
 {
     /**
@@ -32,6 +35,7 @@ class ChainBuilder implements ChainBuilderInterface
     }
 
     /**
+     * Getter to configuration array
      * @return array
      */
     public function getConfiguration(): array
@@ -40,6 +44,7 @@ class ChainBuilder implements ChainBuilderInterface
     }
 
     /**
+     * Getter to build command chain
      * @return CommandChainInterface
      */
     public function getCommandChain(): CommandChainInterface
@@ -48,6 +53,7 @@ class ChainBuilder implements ChainBuilderInterface
     }
 
     /**
+     * Main service method that build command chain and provide input arguments there
      * @param Command $mainCommand
      * @param InputInterface $mainInput
      * @return CommandChainInterface|null
@@ -56,7 +62,6 @@ class ChainBuilder implements ChainBuilderInterface
      */
     public function build(Command $mainCommand, InputInterface $mainInput): ?CommandChainInterface
     {
-        //@TODO add if statement
         $this->mergeConfiguration($mainCommand);
         $commandName = $mainCommand->getName();
         $config      = $this->getConfiguration();
@@ -81,10 +86,10 @@ class ChainBuilder implements ChainBuilderInterface
     }
 
     /**
+     * Method that push master and child commands to class properties
      * @param Command $mainCommand
      * @param InputInterface $mainInput
      * @return $this
-     * @TODO Fix In ChainBuilder.php line 86: Warning: Undefined array key "cache:clear"
      */
     private function pushCommands(Command $mainCommand, InputInterface $mainInput): self
     {
@@ -108,6 +113,7 @@ class ChainBuilder implements ChainBuilderInterface
     }
 
     /**
+     * Method that get ReflectionAttribute instance of CommandChain attribute class
      * @param Command $command
      * @return \ReflectionAttribute|null
      * @throws \ReflectionException
@@ -121,6 +127,7 @@ class ChainBuilder implements ChainBuilderInterface
     }
 
     /**
+     * Method that merge configuration from attribute and provides to service from DI
      * @param Command $command
      * @return void
      * @throws \ReflectionException
@@ -140,8 +147,9 @@ class ChainBuilder implements ChainBuilderInterface
     }
 
     /**
+     * Method that search command in chain to throw CommandExecutionException if find
      * @param string $name
-     * @return bool
+     * @return string|null
      */
     private function getChainByCommand(string $name): ?string
     {
